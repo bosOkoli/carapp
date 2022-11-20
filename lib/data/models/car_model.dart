@@ -1,19 +1,15 @@
-import 'package:flutter/material.dart';
-
 class CarModel {
   final String name;
   final List<CarCompany> carCompany;
-  final Color color;
 
   CarModel(
     this.name,
-    this.color,
     this.carCompany,
   );
 }
 
 List<CarModel> carList = [
-  CarModel("SUV", Colors.deepOrange, [
+  CarModel("SUV", [
     CarCompany([
       Car("new Bugatti", ""),
       Car("new Toyota", ""),
@@ -24,7 +20,7 @@ List<CarModel> carList = [
     CarCompany([], "Toyota", image: "lib/assets/images/ford_logo.png"),
     CarCompany([], "Toyota", image: "lib/assets/images/benz_logo.png"),
   ]),
-  CarModel("Micro", Colors.black, [
+  CarModel("Micro", [
     CarCompany([
       Car("new reign", ""),
       Car("new Toyota", ""),
@@ -34,7 +30,7 @@ List<CarModel> carList = [
     CarCompany([], "Toyota"),
     CarCompany([], "Toyata"),
   ]),
-  CarModel("Fast Cars", Colors.lightBlue, [
+  CarModel("Fast Cars", [
     CarCompany([
       Car("new Ford", ""),
       Car("new Toyota", ""),

@@ -92,10 +92,19 @@ class _RotatingCarCarouselState extends ConsumerState<RotatingCarCarousel>
               Align(
                 alignment: const Alignment(-0.001, 0.001),
                 child: Center(
-                  child: Text(
-                    carList[index].name,
-                    style: const TextStyle(
-                        color: Colors.white, fontSize: 25, fontFamily: "inter"),
+                  child: SizedBox(
+                    width: 70,
+                    child: Center(
+                      child: Text(
+                        carList[index].name,
+                        overflow: TextOverflow.fade,
+                        maxLines: 1,
+                        style: const TextStyle(
+                            color: Colors.purple,
+                            fontSize: 25,
+                            fontFamily: "inter"),
+                      ),
+                    ),
                   ),
                 ),
               ),

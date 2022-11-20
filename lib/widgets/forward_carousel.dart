@@ -43,6 +43,7 @@ class _ForwardCarouselState extends ConsumerState<ForwardCarousel> {
     return SizedBox(
       height: 170,
       child: PageView.builder(
+          physics: const ClampingScrollPhysics(),
           controller: _controller,
           clipBehavior: Clip.hardEdge,
           itemCount: 6,

@@ -23,7 +23,10 @@ class _BackWardCarouselState extends ConsumerState<BackWardCarousel> {
   void initState() {
     super.initState();
     //controller for page view
-    _controller = PageController(viewportFraction: 0.5, initialPage: 0);
+    _controller = PageController(
+      viewportFraction: 0.5,
+      initialPage: 0,
+    );
 
     // move cards every 5 seconds
     animator =
@@ -44,6 +47,7 @@ class _BackWardCarouselState extends ConsumerState<BackWardCarousel> {
     return SizedBox(
       height: 160,
       child: PageView.builder(
+          physics: const ClampingScrollPhysics(),
           reverse: true,
           controller: _controller,
           clipBehavior: Clip.hardEdge,
