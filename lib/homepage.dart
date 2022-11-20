@@ -1,5 +1,6 @@
-import 'dart:async';
-
+import 'package:car_app/widgets/backward_carousel.dart';
+import 'package:car_app/widgets/forward_carousel.dart';
+import 'package:car_app/widgets/rotating_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -10,98 +11,93 @@ class HomePage extends ConsumerStatefulWidget {
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends ConsumerState<HomePage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-  late PageController _pageController;
-  final int _currentPage = 1;
-  int nextIndex = 1;
-  dynamic animator;
-
-  @override
-  void initState() {
-    _controller = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 3000))
-      ..repeat(reverse: false);
-
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInBack,
-    );
-    _pageController = PageController(initialPage: _currentPage);
-
-    // move cards every 5 seconds
-    animator = Timer.periodic(const Duration(seconds: 5), (Timer t) async {
-      _pageController.animateToPage(nextIndex,
-          duration: const Duration(seconds: 1), curve: Curves.ease);
-      nextIndex++;
-
-      //reset view to first card after last view
-      if (nextIndex == 3) {
-        nextIndex = 0;
-        return;
-      }
-    });
-
-    super.initState();
-  }
-
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _pageController,
-              itemCount: 3,
-              itemBuilder: (context, index) => AnimatedBuilder(
-                animation: _animation,
-                builder: ((context, child) {
-                  return RotationTransition(
-                    turns: _animation,
-                    child: Stack(children: [
-                      Center(
-                        child: CircleAvatar(
-                          radius: 180,
-                          backgroundColor: Colors.white.withOpacity(0),
-                        ),
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.only(top: 100, left: 10, right: 10),
+        child: Column(
+          children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "Welcome Bosokoli 👋",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w300),
                       ),
-                      const Align(
-                        alignment: Alignment(-0.6, -0.3),
-                        child: CircleAvatar(radius: 60),
+                      Text(
+                        "Let's go for a drive!",
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w600),
                       ),
-                      const Align(
-                        alignment: Alignment(0.6, 0.3),
-                        child: CircleAvatar(radius: 60),
-                      ),
-                      const Align(
-                        alignment: Alignment(-0.001, 0.001),
-                        child: Text(
-                          "Fast Cars",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontFamily: "inter"),
-                        ),
-                      ),
-                      const Align(
-                        alignment: Alignment(-0.6, 0.3),
-                        child: CircleAvatar(radius: 60),
-                      ),
-                      const Align(
-                        alignment: Alignment(0.6, -0.3),
-                        child: CircleAvatar(radius: 60),
-                      )
-                    ]),
-                  );
-                }),
+                    ],
+                  ),
+                  const Spacer(),
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.purple,
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+            const SizedBox(
+              height: 20,
+            ),
+            const ForwardCarousel(),
+            const SizedBox(
+              height: 5,
+            ),
+            const BackWardCarousel(),
+            const Expanded(child: RotatingCarCarousel()),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.black,
+          elevation: 0,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.purple,
+          unselectedItemColor: Colors.white,
+          items: const [
+            BottomNavigationBarItem(
+              label: "home",
+              icon: Icon(
+                Icons.home_rounded,
               ),
             ),
-          ),
-        ],
-      ),
+            BottomNavigationBarItem(
+              label: "Compass",
+              icon: Icon(
+                Icons.compass_calibration,
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: "Car Repair",
+              icon: Icon(
+                Icons.car_repair,
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: "Profile",
+              icon: Icon(
+                Icons.person,
+              ),
+            )
+          ]),
     );
   }
 }
