@@ -17,6 +17,7 @@ class _RotatingCarCarouselState extends ConsumerState<RotatingCarCarousel>
   late AnimationController _controller;
   late Animation<double> _animation;
   late PageController _pageController;
+  ValueNotifier<int> activePage = ValueNotifier<int>(0);
   final int _currentPage = 1;
   int nextIndex = 1;
   dynamic animator;
@@ -52,94 +53,107 @@ class _RotatingCarCarouselState extends ConsumerState<RotatingCarCarousel>
 
   @override
   Widget build(BuildContext context) {
-    return PageView.builder(
-      controller: _pageController,
-      itemCount: carList.length,
-      itemBuilder: (context, index) => AnimatedBuilder(
-        animation: _animation,
-        builder: ((context, child) {
-          return RotationTransition(
-            turns: _animation,
-            child: Stack(children: [
-              Align(
-                alignment: const Alignment(-0.65, -0.5),
-                child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(boxShadow: const [
-                      BoxShadow(color: Colors.indigo, blurRadius: 15)
-                    ], borderRadius: BorderRadius.circular(100)),
-                    child: Image.asset(
-                      carList[0].carCompany[3].image,
-                      fit: BoxFit.cover,
-                    )),
-              ),
-              Align(
-                alignment: const Alignment(0.65, 0.5),
-                child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(boxShadow: const [
-                      BoxShadow(color: Colors.white, blurRadius: 15)
-                    ], borderRadius: BorderRadius.circular(100)),
-                    child: Image.asset(
-                      carList[0].carCompany[0].image,
-                      fit: BoxFit.cover,
-                    )),
-              ),
-              Align(
-                alignment: const Alignment(-0.001, 0.001),
-                child: Center(
-                  child: SizedBox(
-                    width: 70,
-                    child: Center(
-                      child: Text(
-                        carList[index].name,
-                        overflow: TextOverflow.fade,
-                        maxLines: 1,
-                        style: const TextStyle(
-                            color: Colors.purple,
-                            fontSize: 25,
-                            fontFamily: "inter"),
-                      ),
+    return Column(
+      children: [
+        Expanded(
+          child: PageView.builder(
+            controller: _pageController,
+            onPageChanged: (value) {
+              setState(() {
+                activePage.value = value;
+              });
+            },
+            itemCount: carList.length,
+            itemBuilder: (context, index) => AnimatedBuilder(
+              animation: _animation,
+              builder: ((context, child) {
+                return RotationTransition(
+                  turns: _animation,
+                  child: Stack(children: [
+                    Align(
+                      alignment: const Alignment(-0.65, -0.5),
+                      child: Container(
+                          clipBehavior: Clip.hardEdge,
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(boxShadow: const [
+                            BoxShadow(color: Colors.indigo, blurRadius: 15)
+                          ], borderRadius: BorderRadius.circular(100)),
+                          child: Image.asset(
+                            carList[index].carCompany[3].image,
+                            fit: BoxFit.cover,
+                          )),
                     ),
-                  ),
-                ),
+                    Align(
+                      alignment: const Alignment(0.65, 0.5),
+                      child: Container(
+                          clipBehavior: Clip.hardEdge,
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(boxShadow: const [
+                            BoxShadow(color: Colors.white, blurRadius: 15)
+                          ], borderRadius: BorderRadius.circular(100)),
+                          child: Image.asset(
+                            carList[index].carCompany[0].image,
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    Align(
+                      alignment: const Alignment(-0.65, 0.5),
+                      child: Container(
+                          clipBehavior: Clip.hardEdge,
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(boxShadow: const [
+                            BoxShadow(color: Colors.blue, blurRadius: 15)
+                          ], borderRadius: BorderRadius.circular(100)),
+                          child: Image.asset(
+                            carList[index].carCompany[2].image,
+                            fit: BoxFit.fill,
+                          )),
+                    ),
+                    Align(
+                      alignment: const Alignment(0.65, -0.5),
+                      child: Container(
+                          clipBehavior: Clip.hardEdge,
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(boxShadow: const [
+                            BoxShadow(color: Colors.black, blurRadius: 15)
+                          ], borderRadius: BorderRadius.circular(100)),
+                          child: Image.asset(
+                            carList[index].carCompany[1].image,
+                            fit: BoxFit.cover,
+                          )),
+                    )
+                  ]),
+                );
+              }),
+            ),
+          ),
+        ),
+        Container(
+          height: 30,
+          width: 60,
+          decoration: BoxDecoration(
+              color: carList[activePage.value].color,
+              borderRadius: BorderRadius.circular(20)),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                carList[activePage.value].name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14),
               ),
-              Align(
-                alignment: const Alignment(-0.65, 0.5),
-                child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(boxShadow: const [
-                      BoxShadow(color: Colors.blue, blurRadius: 15)
-                    ], borderRadius: BorderRadius.circular(100)),
-                    child: Image.asset(
-                      carList[0].carCompany[2].image,
-                      fit: BoxFit.fill,
-                    )),
-              ),
-              Align(
-                alignment: const Alignment(0.65, -0.5),
-                child: Container(
-                    clipBehavior: Clip.hardEdge,
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(boxShadow: const [
-                      BoxShadow(color: Colors.black, blurRadius: 15)
-                    ], borderRadius: BorderRadius.circular(100)),
-                    child: Image.asset(
-                      carList[0].carCompany[1].image,
-                      fit: BoxFit.cover,
-                    )),
-              )
-            ]),
-          );
-        }),
-      ),
+            ),
+          ),
+        )
+      ],
     );
   }
 }
